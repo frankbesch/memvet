@@ -379,6 +379,11 @@ API keys, Slack tokens, private-key blocks, and 13–19-digit runs that pass
 the Luhn check (so order and phone numbers do not fire). `patterns` adds
 the repo's own; a custom hit is named "custom pattern <regex>".
 
+Inside a git worktree, files git ignores (untracked and matched by an
+exclude rule) are skipped: they cannot reach history, which is all this
+rule guards. Tracked files are scanned whatever `.gitignore` says, and
+without git every file matching `globs` is scanned.
+
 ## secrets/no-match
 
 **YELLOW** · A `[secrets]` glob matches nothing, so nothing was scanned.

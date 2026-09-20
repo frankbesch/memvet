@@ -45,3 +45,55 @@ func TestSecretsCustomPatternAndNoMatch(t *testing.T) {
 	wantCounts(t, res, 1, 1)
 	wantMessage(t, res, "custom pattern")
 }
+
+// Inside a git worktree the rule skips what git ignores: a file that can
+// never be committed cannot reach history, which is all the rule guards.
+// Untracked-but-not-ignored, tracked-despite-a-pattern, and no-git trees
+// are scanned as before (D-191 item 9; incident 2026-09-18, a vendored
+// doc under a gitignored .venv raised a false RED).
+func TestSecretsHonorsGitignore(t *testing.T) {
+	requireGit(t)
+	const secret = "key AKIAIOSFODNN7EXAMPLE\n"
+	cfg := &config.Secrets{Globs: []string{"**/*.md"}}
+
+	t.Run("gitignored file is skipped", func(t *testing.T) {
+		root := newRepo(t, map[string]string{".gitignore": "vendor/\n", "README.md": "clean\n"})
+		writeFile(t, root, "vendor/doc.md", secret)
+		writeFile(t, root, "notes/local.md", secret)
+		writeFile(t, root, ".gitignore", "vendor/\nnotes/local.md\n")
+		res := runSecrets(root, cfg)
+		wantCounts(t, res, 0, 0)
+		if res.FilesChecked != 1 {
+			t.Errorf("FilesChecked = %d, want 1 (ignored files are not checked)", res.FilesChecked)
+		}
+	})
+
+	t.Run("untracked but not ignored is a finding", func(t *testing.T) {
+		root := newRepo(t, map[string]string{"README.md": "clean\n"})
+		writeFile(t, root, "vendor/doc.md", secret)
+		res := runSecrets(root, cfg)
+		wantCounts(t, res, 1, 0)
+		if !hasFinding(res, "secrets", "vendor/doc.md", "AWS access key") {
+			t.Errorf("an untracked file is one git add from history:\n%s", dump(res))
+		}
+	})
+
+	t.Run("tracked file matching an ignore pattern is still scanned", func(t *testing.T) {
+		root := newRepo(t, map[string]string{"vendor/doc.md": secret})
+		writeFile(t, root, ".gitignore", "vendor/\n")
+		res := runSecrets(root, cfg)
+		wantCounts(t, res, 1, 0)
+		if !hasFinding(res, "secrets", "vendor/doc.md", "AWS access key") {
+			t.Errorf("a tracked file is in history whatever .gitignore says:\n%s", dump(res))
+		}
+	})
+
+	t.Run("no git means no skipping", func(t *testing.T) {
+		root := writeTree(t, map[string]string{".gitignore": "vendor/\n", "vendor/doc.md": secret})
+		res := runSecrets(root, cfg)
+		wantCounts(t, res, 1, 0)
+		if !hasFinding(res, "secrets", "vendor/doc.md", "AWS access key") {
+			t.Errorf("without a worktree the rule must scan everything:\n%s", dump(res))
+		}
+	})
+}

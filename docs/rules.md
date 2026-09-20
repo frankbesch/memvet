@@ -401,6 +401,8 @@ patterns = ["FB-SECRET-\\d+"]   # optional extras
 ```
 
 Run it with `--changed` before committing and a secret cannot reach history.
+Inside a git worktree, files git ignores are skipped (they cannot reach
+history); without git, everything matching `globs` is scanned.
 
 ## Glob semantics
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -43,7 +44,17 @@ func checkSecrets(r *runner, cfg *config.Secrets) {
 		patterns = append(patterns, secretPattern{kind: "custom pattern " + p, re: regexp.MustCompile(p)})
 	}
 	matched := make(map[string]bool, len(cfg.Globs))
+	ignored := gitIgnored(r.root)
 	r.walk(ruleSecrets, func(rel string, d fs.DirEntry) error {
+		// A file git will never track cannot reach history, which is the
+		// only thing this rule guards; a gitignored vendor tree full of
+		// documented example card numbers is noise, not a tripwire.
+		if ignored != nil && ignored(rel) {
+			if d.IsDir() {
+				return fs.SkipDir
+			}
+			return nil
+		}
 		if d.IsDir() || !d.Type().IsRegular() {
 			return nil
 		}
@@ -113,4 +124,48 @@ func luhnValid(s string) bool {
 		n++
 	}
 	return n >= 13 && sum%10 == 0
+}
+
+// gitIgnored returns a predicate over root-relative slash paths that reports
+// whether git would never track them: untracked paths that an exclude rule
+// matches, exactly as `git ls-files --others --ignored --exclude-standard
+// --directory` lists them from root. A wholly ignored directory comes back
+// as one "dir/" entry, so the predicate answers for its descendants too. A
+// tracked file is never ignored whatever .gitignore says: it is in history
+// already, so it is scanned. Git absent, root outside a worktree, or any
+// git failure returns nil and the caller scans everything, as it always
+// did: scanning more is the safe failure direction for a tripwire, and a
+// silent narrowing is the one thing this rule must never do.
+func gitIgnored(root string) func(rel string) bool {
+	if _, err := exec.LookPath("git"); err != nil {
+		return nil
+	}
+	out, err := gitOut(root, "ls-files", "--others", "--ignored", "--exclude-standard", "--directory", "-z", "--", ".")
+	if err != nil {
+		return nil
+	}
+	files := map[string]bool{}
+	var dirs []string
+	for _, entry := range strings.Split(out, "\x00") {
+		if entry == "" {
+			continue
+		}
+		entry = filepath.ToSlash(entry)
+		if strings.HasSuffix(entry, "/") {
+			dirs = append(dirs, entry)
+		} else {
+			files[entry] = true
+		}
+	}
+	return func(rel string) bool {
+		if files[rel] {
+			return true
+		}
+		for _, d := range dirs {
+			if strings.HasPrefix(rel+"/", d) {
+				return true
+			}
+		}
+		return false
+	}
 }

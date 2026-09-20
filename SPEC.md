@@ -918,3 +918,38 @@ frankbesch/memvet; CI 35185184785 green; tag v0.12.0; Release run
 frankbesch/homebrew-tap (memlint.rb removed, tap 4aaff72); `go install
 github.com/frankbesch/memvet@v0.12.0` resolves and prints v0.12.0;
 ~/go/bin/memvet installed, ~/go/bin/memlint removed.
+
+# --- v0.12.x: [secrets] honors .gitignore (ruled 2026-09-20, D-191 item 9) ---
+
+Correctness fix to the existing rule, carved out of the D-143 §6 freeze by
+D-191; no new rule, flag, or finding code; no version bump or tag before
+GoReleaser v2.19 (D-172). Incident 2026-09-18: `check --strict` on FBOS
+walked the gitignored `.venv/` and raised RED secrets/match on a vendored
+Playwright doc with a Luhn-valid example number; the workaround narrowed
+the FBOS globs to `["*.md", "[^.]*/**/*.md", ".claude/**/*.md"]`.
+
+Change: inside a git worktree `[secrets]` skips what git ignores, defined
+as `git ls-files --others --ignored --exclude-standard --directory` from
+the checked root (untracked paths an exclude rule matches; a wholly
+ignored directory is pruned, not walked). A tracked file that matches an
+ignore pattern is still scanned: it is in history. Git absent, root not in
+a worktree, or the git call failing = no skipping, exactly as before;
+scanning more is the safe failure direction and a silent narrowing is
+forbidden. Secrets-only: the shared walker (`junk`, `tokens`, `pointers`
+sibling pass) is unchanged, since only this rule's contract is "must not
+reach history". Skipped files do not count toward FilesChecked. Output
+stays sorted and deterministic.
+
+Gates:
+G1 CHECK `go build ./...` EXPECT exit 0, no output.
+G2 CHECK `go test ./...` EXPECT ok, including TestSecretsHonorsGitignore
+   (ignored -> no finding; untracked -> finding; tracked-despite-pattern
+   -> finding; no git -> finding).
+G3 CHECK `go vet ./...` clean; `gofmt -l .` empty.
+G4 CHECK fixture-broken 10 red 4 yellow exit 1; fixture-clean clean exit 0.
+G5 CHECK new binary on a scratch md-only copy of FBOS with
+   `globs = ["**/*.md"]` EXPECT zero secrets findings under `.venv/`;
+   installed v0.12.0 on the same copy EXPECT the RED (before/after).
+G6 CHECK new binary `check --strict ~/Documents/promptkits` EXPECT clean;
+   `~/go/bin/memvet` not replaced by the build.
+Receipt: promptkits reviews/2026-09-20-fund-build/memvet.md.

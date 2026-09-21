@@ -57,6 +57,14 @@ blind spot `check` can never see through (CLAUDE.md, "smallest rule
 surface"). Unprefixed formats belong in `[secrets] patterns` instead.
 No roadmap items remain open; rule expansion stays frozen (D-143).
 
+Backlog, not roadmap (2026-09-20): an AI review step on pull requests via
+alibaba/open-code-review's composite GitHub Action (Apache-2.0, OpenSSF
+Gold). It needs an LLM endpoint and token as repository secrets, so it was
+ruled backlog under the freeze. If revisited: trigger on `pull_request`,
+never `pull_request_target`; one Go rule in `.opencodereview/rule.json`;
+`upload_artifacts: 'true'`. Its delegation mode overlaps the native
+`/code-review` command and is not wanted.
+
 Shipped in v0.9: anchor validation in `[pointers]` (`pointers/dead-anchor`,
 reserved since v0.6); the tree fingerprint — `memvet fingerprint`, the
 `tree …` receipt in every summary, `--expect-tree`, and `summary.tree`.

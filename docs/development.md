@@ -63,7 +63,9 @@ Gold). It needs an LLM endpoint and token as repository secrets, so it was
 ruled backlog under the freeze. If revisited: trigger on `pull_request`,
 never `pull_request_target`; one Go rule in `.opencodereview/rule.json`;
 `upload_artifacts: 'true'`. Its delegation mode overlaps the native
-`/code-review` command and is not wanted.
+`/code-review` command and is not wanted. Ruled 2026-09-20 (FBOS D-196):
+stays backlog until v0.10.0 ships; the maintainers' own reference workflow
+uses `pull_request_target`, which confirms the trigger caveat above.
 
 Shipped in v0.9: anchor validation in `[pointers]` (`pointers/dead-anchor`,
 reserved since v0.6); the tree fingerprint — `memvet fingerprint`, the

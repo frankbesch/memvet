@@ -34,15 +34,15 @@ Exit 2 always means "memvet could not run", never "the repo failed".
   `append_only/rewritten`) in your receipt, not a summary.
 - Use `--changed` in a pre-commit or wrap step to see only findings that
   touch files you modified.
-- Never call `memvet init` on a repo that already has `.memvet.toml`; it
-  refuses, and that refusal is correct.
+- `memvet init` refuses when `.memvet.toml` exists; treat that as correct
+  and edit the existing file.
 - memvet does not judge prose, does not store memory, and does not call
   any model. Do not ask it whether content is true.
-- Rules are declared in `.memvet.toml`. The rule set is frozen (owner's
-  ruling; the admission bar is in CONTRIBUTING.md). Do not propose new
+- Rules are declared in `.memvet.toml`. The rule set is frozen (FBOS
+  D-143; the admission bar is in CONTRIBUTING.md). Do not propose new
   rules through this file.
 
 Full reference: [docs/cli.md](docs/cli.md), [docs/rules.md](docs/rules.md),
-[docs/findings.md](docs/findings.md). Mirror of the human-facing
-[CLAUDE.md](CLAUDE.md) contract for contributors is separate; this file is
-for agents that *use* the tool.
+[docs/findings.md](docs/findings.md). This file is for agents that *use*
+the tool. Changing memvet itself? Read [CLAUDE.md](CLAUDE.md) first; its
+hard rules bind every agent, whatever the runtime.

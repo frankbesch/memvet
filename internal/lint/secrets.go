@@ -20,9 +20,11 @@ const ruleSecrets = "secrets"
 type secretPattern struct {
 	kind string
 	re   *regexp.Regexp
-	// luhn narrows digit runs to card numbers with a valid check digit, so
-	// order numbers and phone numbers do not fire.
-	luhn bool
+	// card narrows digit runs to payment card numbers: a whole number, not
+	// part of a decimal, with an issuer prefix and length in use and a valid
+	// Luhn check digit, so order numbers, phone numbers, record ids, and
+	// float mantissas do not fire.
+	card bool
 }
 
 var builtinSecrets = []secretPattern{
@@ -77,8 +79,8 @@ func checkSecrets(r *runner, cfg *config.Secrets) {
 		for i, line := range strings.Split(string(data), "\n") {
 			for _, p := range patterns {
 				hit := false
-				for _, m := range p.re.FindAllString(line, -1) {
-					if !p.luhn || luhnValid(m) {
+				for _, m := range p.re.FindAllStringIndex(line, -1) {
+					if !p.card || cardNumber(line, m[0], m[1]) {
 						hit = true
 						break
 					}
@@ -102,6 +104,65 @@ func checkSecrets(r *runner, cfg *config.Secrets) {
 			})
 		}
 	}
+}
+
+// cardNumber reports whether line[start:end], a digit run the card pattern
+// matched, is a payment card number. One digit run in ten passes Luhn by
+// chance, so Luhn alone flags coordinates and record ids (D-230).
+func cardNumber(line string, start, end int) bool {
+	isDigit := func(i int) bool { return i >= 0 && i < len(line) && line[i] >= '0' && line[i] <= '9' }
+	// The fractional or integer part of a decimal number is not a card.
+	if start > 0 && line[start-1] == '.' && isDigit(start-2) {
+		return false
+	}
+	if end < len(line) && line[end] == '.' && isDigit(end+1) {
+		return false
+	}
+	digits := make([]byte, 0, end-start)
+	for i := start; i < end; i++ {
+		if isDigit(i) {
+			digits = append(digits, line[i])
+		}
+	}
+	return issuerValid(string(digits)) && luhnValid(string(digits))
+}
+
+// issuerValid reports whether the digits open with an issuer prefix (IIN)
+// of a card network in use and have a length that network issues. Ranges:
+// the issuer table in en.wikipedia.org/wiki/Payment_card_number (ISO/IEC
+// 7812 allocations), read 2026-09-29.
+func issuerValid(d string) bool {
+	n := len(d)
+	if n < 13 {
+		return false
+	}
+	prefix := func(k int) int {
+		v := 0
+		for i := 0; i < k; i++ {
+			v = v*10 + int(d[i]-'0')
+		}
+		return v
+	}
+	p2, p3, p4, p6 := prefix(2), prefix(3), prefix(4), prefix(6)
+	switch {
+	case d[0] == '4': // Visa
+		return n == 13 || n == 16 || n == 19
+	case p2 >= 51 && p2 <= 55, p4 >= 2221 && p4 <= 2720: // Mastercard
+		return n == 16
+	case p2 == 34, p2 == 37: // American Express
+		return n == 15
+	case p2 == 30, p2 == 36, p2 == 38, p2 == 39: // Diners Club
+		return n >= 14
+	case p4 >= 3528 && p4 <= 3589: // JCB
+		return n >= 16
+	case p2 == 62, p4 == 6011, p3 >= 644 && p3 <= 649, p2 == 65: // UnionPay, Discover
+		return n >= 16
+	case p4 == 5018, p4 == 5020, p4 == 5038, p4 == 5893, p4 == 6304,
+		p4 == 6759, p4 == 6761, p4 == 6762, p4 == 6763,
+		p6 == 676770, p6 == 676774: // Maestro
+		return true
+	}
+	return false
 }
 
 // luhnValid reports whether the digits in s pass the Luhn check.

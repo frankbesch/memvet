@@ -953,3 +953,51 @@ G5 CHECK new binary on a scratch md-only copy of FBOS with
 G6 CHECK new binary `check --strict ~/Documents/promptkits` EXPECT clean;
    `~/go/bin/memvet` not replaced by the build.
 Receipt: promptkits reviews/2026-09-20-fund-build/memvet.md.
+
+# --- v0.12.x: [secrets] card detector checks issuer and decimal context (ruled 2026-09-29, D-230) ---
+
+Correctness fix to the existing rule under D-230; no new rule, flag,
+config key, or finding code; no version bump or tag before GoReleaser
+v2.19 (D-172). Incident 2026-09-29: `check --strict` on job-search raised
+423 RED secrets/match "possible card number" (tree 6b073765c29e). A
+shape-only read (no value printed) found hyphenated 14-digit well API
+numbers, 17- and 18-digit record ids, and the fractional digits of
+coordinates and floats. The detector already applied Luhn; one digit run
+in ten passes Luhn by chance.
+
+Change: a digit run the card pattern matches is a card number only when
+all three hold. (1) It is not part of a decimal number: not preceded by
+digit-then-`.`, not followed by `.`-then-digit. A sentence-ending period
+does not exempt it. (2) Its leading digits are an issuer prefix (IIN) in
+use and its length is one that network issues: Visa 4 (13, 16, 19);
+Mastercard 51-55, 2221-2720 (16); American Express 34, 37 (15); Diners
+Club 30, 36, 38, 39 (14-19); JCB 3528-3589 (16-19); UnionPay 62 and
+Discover 6011, 644-649, 65 (16-19); Maestro 5018, 5020, 5038, 5893, 6304,
+6759, 6761-6763, 676770, 676774 (13-19). Source: issuer table,
+en.wikipedia.org/wiki/Payment_card_number, read 2026-09-29. (3) It passes
+Luhn, as before. The pattern, the 13-19 digit range, and the space or
+hyphen grouping are unchanged. A quoted or unquoted JSON value that meets
+all three is still RED: token type is not an exemption.
+
+Known narrowing: a Luhn-valid 13-19-digit run with no listed issuer prefix
+no longer fires. Test numbers: docs.stripe.com/testing, read 2026-09-29.
+
+Gates:
+G1 CHECK `go build ./...` EXPECT exit 0, no output.
+G2 CHECK `go test ./...` EXPECT ok, including TestSecretsCardNumberShape
+   (decimal parts, non-card JSON tokens, issuer/length mismatch, Luhn
+   fail -> no finding; published test numbers plain, spaced, hyphenated,
+   JSON, CSV, sentence-end -> finding).
+G3 CHECK `go vet ./...` clean; `gofmt -l .` empty.
+G4 CHECK fixture-broken 10 red 4 yellow exit 1; fixture-clean clean exit 0.
+G5 CHECK scratch binary `check --strict .` in job-search EXPECT zero
+   "possible card number" findings; installed binary on the same tree
+   EXPECT 423 red (before/after).
+G6 CHECK scratch binary `check --strict ~/Documents/promptkits` EXPECT
+   clean; `~/go/bin/memvet` not replaced by the build.
+Receipt: G1-G6 run locally 2026-09-29 (go build exit 0; go test ok; vet
+clean, gofmt empty; fixture-broken 10 red 4 yellow exit 1, fixture-clean
+clean exit 0; job-search scratch binary clean, 4 rules, 2703 files, tree
+6b073765c29e, exit 0, installed binary 423 red on the same tree;
+promptkits clean, 8 rules, 788 files, exit 0; `~/go/bin/memvet` dated
+2026-09-20, not replaced).

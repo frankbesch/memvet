@@ -391,8 +391,9 @@ A card number once rode three commits deep in a memory repo before anyone
 questioned the push. This is the working-tree tripwire: files matching
 `globs` are scanned for credential-shaped text — AWS keys, GitHub tokens,
 Anthropic and OpenAI keys, Slack tokens, private-key blocks, and card
-numbers (13–19 digits that pass the Luhn check, so order and phone numbers
-stay quiet). `patterns` adds the repo's own. The value is **never printed**.
+numbers (13–19 digits with a card-network issuer prefix and length that
+pass the Luhn check and are not part of a decimal number, so order numbers,
+phone numbers, record ids, and coordinates stay quiet). `patterns` adds the repo's own. The value is **never printed**.
 
 ```toml
 [secrets]

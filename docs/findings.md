@@ -375,8 +375,10 @@ printed. Remove or truncate it before it reaches history; if it is a
 deliberate example, change it so the detector no longer fires.
 
 Built-in detectors: AWS access keys, GitHub tokens, Anthropic and OpenAI
-API keys, Slack tokens, private-key blocks, and 13–19-digit runs that pass
-the Luhn check (so order and phone numbers do not fire). `patterns` adds
+API keys, Slack tokens, private-key blocks, and 13–19-digit runs that open
+with a card-network issuer prefix, have a length that network issues, pass
+the Luhn check, and are not part of a decimal number (so order numbers,
+phone numbers, record ids, and coordinates do not fire). `patterns` adds
 the repo's own; a custom hit is named "custom pattern <regex>".
 
 Inside a git worktree, files git ignores (untracked and matched by an

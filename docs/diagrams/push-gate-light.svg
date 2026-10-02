@@ -1,0 +1,46 @@
+<svg viewBox="0 0 360 616" xmlns="http://www.w3.org/2000/svg" role="img" font-family='ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace'>
+<title>Gating a push on memvet</title>
+<desc>A gate script runs memvet check --strict; RED means exit 1 and stop. On a clean run it runs memvet fingerprint and writes a marker, .git/push-ok, naming the checks passed, the time, and the tree. On git push origin main the pre-push hook reads the marker and fingerprints the tree again. A marker under 10 minutes old with a matching tree allows one plain push and is consumed. Anything else, a stale marker, a moved tree, or a push that is not plain, asks a human.</desc>
+<rect width="360" height="616" rx="6" fill="#FCFBF9"/>
+<text x="16" y="30" font-size="15" fill="#2B2926" font-weight="600">Gating a push on memvet</text>
+<line x1="16" y1="42" x2="344" y2="42" stroke="#D2CCC3"/>
+<rect x="16" y="54" width="328" height="46" rx="4" fill="#EBE6DD" stroke="#33703F"/>
+<text x="30" y="73" font-size="13" fill="#2B2926" font-weight="600">Gate script: memvet check --strict</text>
+<text x="30" y="91" font-size="12" fill="#6A625A">RED means exit 1 and stop</text>
+<path d="M40 104 L40 132" fill="none" stroke="#6A625A" stroke-width="1.5"/><polygon points="35,124 45,124 40,132" fill="#6A625A"/>
+<text x="58" y="123" font-size="12" fill="#6A625A">clean, exit 0</text>
+<rect x="16" y="136" width="328" height="46" rx="4" fill="#EBE6DD" stroke="#D2CCC3"/>
+<text x="30" y="155" font-size="13" fill="#2B2926" font-weight="600">memvet fingerprint</text>
+<text x="30" y="173" font-size="12" fill="#6A625A">tree a5e8a264f658</text>
+<path d="M40 186 L40 214" fill="none" stroke="#6A625A" stroke-width="1.5"/><polygon points="35,206 45,206 40,214" fill="#6A625A"/>
+<text x="58" y="205" font-size="12" fill="#6A625A">tree hash</text>
+<rect x="16" y="218" width="328" height="46" rx="4" fill="#EBE6DD" stroke="#D2CCC3"/>
+<text x="30" y="237" font-size="13" fill="#2B2926" font-weight="600">Marker written: .git/push-ok</text>
+<text x="30" y="255" font-size="12" fill="#6A625A">checks passed, time, tree</text>
+<path d="M40 268 L40 296" fill="none" stroke="#6A625A" stroke-width="1.5"/><polygon points="35,288 45,288 40,296" fill="#6A625A"/>
+<text x="58" y="287" font-size="12" fill="#6A625A">developer or agent pushes</text>
+<rect x="16" y="300" width="328" height="46" rx="4" fill="#EBE6DD" stroke="#D2CCC3"/>
+<text x="30" y="319" font-size="13" fill="#2B2926" font-weight="600">git push origin main</text>
+<text x="30" y="337" font-size="12" fill="#6A625A">the pre-push hook reads the marker</text>
+<path d="M40 350 L40 378" fill="none" stroke="#6A625A" stroke-width="1.5"/><polygon points="35,370 45,370 40,378" fill="#6A625A"/>
+<text x="58" y="369" font-size="12" fill="#6A625A">marker found</text>
+<rect x="16" y="382" width="328" height="46" rx="4" fill="#EBE6DD" stroke="#D2CCC3"/>
+<text x="30" y="401" font-size="13" fill="#2B2926" font-weight="600">Fingerprint the tree again</text>
+<text x="30" y="419" font-size="12" fill="#6A625A">marker under 10 min, same tree?</text>
+<path d="M94 428 L94 468" fill="none" stroke="#33703F" stroke-width="2"/><polygon points="89,460 99,460 94,468" fill="#33703F"/>
+<rect x="100.0" y="439" width="31.6" height="18" rx="3" fill="#FCFBF9"/><text x="104" y="452" font-size="12" fill="#33703F">yes</text>
+<path d="M266 428 L266 468" fill="none" stroke="#90302B" stroke-width="1.5" stroke-dasharray="5 4"/><polygon points="261,460 271,460 266,468" fill="#90302B"/>
+<rect x="272.0" y="439" width="24.4" height="18" rx="3" fill="#FCFBF9"/><text x="276" y="452" font-size="12" fill="#90302B">no</text>
+<rect x="16" y="468" width="156" height="86" rx="5" fill="#EBE6DD" stroke="#33703F" stroke-width="1.5"/>
+<text x="94" y="491" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">Push allowed</text>
+<text x="94" y="509" font-size="12" fill="#6A625A" text-anchor="middle">one plain push;</text>
+<text x="94" y="525" font-size="12" fill="#6A625A" text-anchor="middle">marker consumed</text>
+<text x="94" y="541" font-size="12" fill="#33703F" text-anchor="middle">origin/main</text>
+<rect x="188" y="468" width="156" height="86" rx="5" fill="#EBE6DD" stroke="#90302B" stroke-width="1.5"/>
+<text x="266" y="491" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">Ask a human</text>
+<text x="266" y="509" font-size="12" fill="#6A625A" text-anchor="middle">stale marker, moved</text>
+<text x="266" y="525" font-size="12" fill="#6A625A" text-anchor="middle">tree, or not a</text>
+<text x="266" y="541" font-size="12" fill="#6A625A" text-anchor="middle">plain push</text>
+<text x="16" y="582" font-size="12" fill="#6A625A">memvet stores nothing; the gate script keeps</text>
+<text x="16" y="599" font-size="12" fill="#6A625A">the receipt.</text>
+</svg>

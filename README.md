@@ -6,9 +6,9 @@
 Integrity checks for file-based AI agent state: memory, instructions,
 decisions, and contracts.
 
-Think `go vet` or `fsck`, not ESLint. memvet verifies properties you declare must stay
-true across a repo of markdown that an agent runtime reads as memory. It does
-not judge prose, and it is not a memory store or retrieval system.
+Think `go vet` or `fsck`, not ESLint. memvet verifies properties you declare
+must stay true across a repo of markdown that an agent runtime reads as
+memory. It does not judge prose, and it is not a memory store.
 
 `check` is **read-only**. It never edits, creates, moves, or deletes a file,
 and there is no `--fix`. The one write in the whole tool is `memvet init`,
@@ -23,11 +23,23 @@ folder of notes into context on every run. Those files drift silently:
 - An append-only decision log was quietly rewritten.
 - `CLAUDE.md` and `AGENTS.md` are supposed to be identical and no longer are.
 
-Nothing fails. The agent just starts working from something that is no longer
-true. memvet turns each of those into a RED finding with a file, a line, and
-a stable code.
+Nothing fails. The agent just works from something that is no longer true.
+memvet turns each of those into a RED finding with a file, a line, and a code.
 
-![What gets checked against what: declared invariants, the memory repo, and git history go into memvet check; RED and YELLOW findings, a tree fingerprint, and the human edit come out. No arrow returns to the repo.](docs/diagrams/positioning.svg)
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/positioning-dark.svg"/><img width="400" align="top" src="docs/diagrams/positioning-light.svg" alt="Diagram: what memvet checks against what. Text version below."/></picture>
+
+<details><summary>Text version of this diagram</summary>
+
+Three inputs go into `memvet check`: the invariants declared in `.memvet.toml`,
+the memory repo as it is in the working tree, and git history for authorship
+and the base commit. `check` reads them and writes nothing. Out come a RED
+finding (exit 1), a YELLOW finding (warns; fails only under `--strict`), and a
+tree fingerprint, the receipt of the tree it judged. RED and YELLOW go to the
+human, who edits the repo, the only fix path. The fingerprint goes to CI or a
+push gate, which can hold a later run to it with `--expect-tree`. No arrow
+returns to the repo.
+
+</details>
 
 ## 60-second example
 
@@ -44,7 +56,9 @@ watch = ["MEMORY.md", "memory/*.md"]
 budget = 400
 ```
 
-`memvet check examples/broken` prints:
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/example-output-dark.svg"/><img width="400" align="top" src="docs/diagrams/example-output-light.svg" alt="Terminal: what memvet check examples/broken prints. Text version below."/></picture>
+
+<details><summary>The output as text</summary>
 
 <!-- examples/broken output: kept identical to the real run by TestReadmeOutputMatchesExample -->
 ```text
@@ -54,10 +68,11 @@ docs: https://github.com/frankbesch/memvet/blob/main/docs/findings.md
 memvet: 1 red, 1 yellow (tree a5e8a264f658)
 ```
 
-RED means a declared invariant is broken and the run exits 1. YELLOW means
-something needs attention but does not fail the run unless you pass
-`--strict`. Every code links to a plain-English entry in
-[docs/findings.md](docs/findings.md).
+</details>
+
+RED means a declared invariant is broken and the run exits 1. YELLOW needs
+attention and fails the run only under `--strict`. Every code links to a
+plain-English entry in [docs/findings.md](docs/findings.md).
 
 ## Install
 
@@ -66,21 +81,22 @@ brew install frankbesch/tap/memvet
 ```
 
 ```bash
-go install github.com/frankbesch/memvet@latest
+go install \
+  github.com/frankbesch/memvet@latest
 ```
 
-Or try it once without installing anything, on the repo you are in:
+Or try it once, without installing, on the repo you are in:
 
 ```bash
-go run github.com/frankbesch/memvet@latest check .
+go run \
+  github.com/frankbesch/memvet@latest \
+  check .
 ```
 
 With no `.memvet.toml` yet, `check` runs what it can infer from the tree
-and says so in its first line.
-
-Or download a binary for macOS or Linux from the
-[releases page](https://github.com/frankbesch/memvet/releases) and verify it
-against `checksums.txt`. `memvet --version` tells you what you got.
+and says so in its first line. Binaries for macOS and Linux are on the
+[releases page](https://github.com/frankbesch/memvet/releases), with
+`checksums.txt` to verify them; `memvet --version` tells you what you got.
 
 ## Quick start
 
@@ -93,9 +109,10 @@ memvet check
 
 `init` inspects the repo, writes a `.memvet.toml` that enables only the
 rules it found evidence for, and reports what it enabled, what it only
-suggests, and what it refused to guess. `memvet init --dry-run` shows the
-config without writing it. Review it, then add rules from the table below as your repo accumulates invariants worth declaring. Ready-made configs
-for common layouts are in [docs/recipes.md](docs/recipes.md).
+suggests, and what it refused to guess; `--dry-run` shows the config without
+writing it. Review it, then add rules from the table below as your repo
+accumulates invariants worth declaring. Ready-made configs for common
+layouts are in [docs/recipes.md](docs/recipes.md).
 
 ## What can it protect?
 
@@ -112,18 +129,9 @@ for common layouts are in [docs/recipes.md](docs/recipes.md).
 | scratch files do not creep into the repo | [`junk`](docs/rules.md#junk--files-that-should-not-be-there--yellow) |
 | credential-shaped strings never land in memory | [`secrets`](docs/rules.md#secrets--credentials-that-must-not-be-there--red) |
 
-Ten rules, five ideas:
-
-| Family | Rules | Protects against |
-|---|---|---|
-| Referential integrity | `pointers`, `ids` | dangling or ambiguous references |
-| Mutation and provenance | `append_only`, `human_brief` | rewritten history, wrong author |
-| Replication and ownership | `mirrors`, `blocks` | copies that disagree, unsafe shared regions |
-| Freshness and capacity | `stamps`, `tokens` | stale or bloated context |
-| Hygiene tripwires | `junk`, `secrets` | things that should not be in the tree |
-
 A section's presence in `.memvet.toml` is what enables its rule. Full key
-reference: [docs/rules.md](docs/rules.md).
+reference and the five ideas behind the ten rules:
+[docs/rules.md](docs/rules.md).
 
 ## In CI
 
@@ -137,52 +145,45 @@ runs `check --format github`:
 - uses: frankbesch/memvet@v0.12.0
   with:
     strict: true
-    base: ${{ github.event.pull_request.base.sha }}
-```
-
-A complete pull-request workflow using `go install` instead is in
-[.github/examples/memvet.yml](.github/examples/memvet.yml). The core of it:
-
-```yaml
-- uses: actions/checkout@v4
-  with:
-    fetch-depth: 0
-- uses: actions/setup-go@v5
-  with:
-    go-version: stable
-- run: go install github.com/frankbesch/memvet@latest
-- run: memvet check --format github --strict --base "${{ github.event.pull_request.base.sha }}" .
+    base:
+      ${{github.event.pull_request.base.sha}}
 ```
 
 `--format github` renders each finding as an inline annotation on the diff.
 `--base` matters for `append_only`: a fresh checkout equals its own HEAD, so
 without a base the log has nothing to be compared against. `fetch-depth: 0`
-makes that base reachable.
+makes that base reachable. A complete pull-request workflow using
+`go install` instead is in
+[.github/examples/memvet.yml](.github/examples/memvet.yml).
 
-A push gate built on `check` and `fingerprint` looks like this: a gate script
-runs the checks and writes a one-shot marker naming the tree it judged; the
-push hook recomputes the fingerprint and allows one plain push only while the
-tree still matches. Anything else asks a human.
+Every `check` summary ends with a fingerprint of the exact tree it judged,
+and `--expect-tree` holds a later run to it: a tree that changed in between
+is one RED finding. memvet stores nothing; the caller keeps the receipt. A
+push gate built on that looks like this:
 
-![Gating a push on memvet: the gate script runs check --strict and fingerprint, writes a marker; the push hook rereads the marker, recomputes the fingerprint, and allows one plain push on a match. Stale or moved falls back to asking a human.](docs/diagrams/push-gate.svg)
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/push-gate-dark.svg"/><img width="400" align="top" src="docs/diagrams/push-gate-light.svg" alt="Diagram: one push through a gate built on check and fingerprint. Text version below."/></picture>
 
-## Tree receipts
+<details><summary>Text version of this diagram</summary>
 
-Every `check` summary ends with a fingerprint of the exact tree it judged.
-A later run can be held to it with `--expect-tree`, which turns a tree that
-changed in between into one RED finding. memvet stores nothing; the caller
-keeps the receipt. Details in [docs/tree-receipts.md](docs/tree-receipts.md).
+A gate script runs `memvet check --strict`; RED means exit 1 and stop. On a
+clean run it runs `memvet fingerprint` and writes a marker, `.git/push-ok`,
+naming the checks passed, the time, and the tree. On `git push origin main`
+the pre-push hook reads the marker and fingerprints the tree again. A marker
+under 10 minutes old with a matching tree allows one plain push and is
+consumed. A stale marker, a moved tree, or a push that is not plain asks a
+human.
+
+</details>
 
 ## Documentation
 
 - [Configuration](docs/configuration.md): the `.memvet.toml` format and what it rejects.
 - [Rules](docs/rules.md): every rule, its keys, what it proves and what it cannot.
-- [Recipes](docs/recipes.md): copy-and-paste configs for common memory layouts, each a runnable example.
-- [Command line](docs/cli.md): flags, exit codes, JSON and GitHub output.
-- [Finding codes](docs/findings.md): what each code means and what to do.
-- [Tree receipts](docs/tree-receipts.md): fingerprints and `--expect-tree`.
-- [Development](docs/development.md): tests, fixtures, releases, roadmap.
+- [Recipes](docs/recipes.md): copy-and-paste configs for common layouts, each a runnable example.
+- [Command line](docs/cli.md): flags, exit codes, JSON and GitHub output. [Development](docs/development.md): tests, fixtures, releases, roadmap.
+- [Finding codes](docs/findings.md): what each code means and what to do. [Tree receipts](docs/tree-receipts.md): fingerprints and `--expect-tree`.
 - [SPEC.md](SPEC.md): the versioned build log, for design provenance.
+- [CONTRIBUTING.md](CONTRIBUTING.md): behavior changes start as a SPEC.md addendum with gates. Bug reports and proposed invariants are welcome as issues.
 
 ## What memvet does not do
 
@@ -192,12 +193,6 @@ keeps the receipt. Details in [docs/tree-receipts.md](docs/tree-receipts.md).
 - Replace a full secret scanner; `[secrets]` is a last-mile tripwire on the working tree.
 - Repair anything. `check` never writes, and `init` only creates a config that did not exist.
 - Watch mode, HTML output, or a hosted service.
-
-## Contributing
-
-Behavior changes start as a SPEC.md addendum with gates; see
-[CONTRIBUTING.md](CONTRIBUTING.md). Bug reports and proposed invariants are
-welcome as issues.
 
 ## License
 

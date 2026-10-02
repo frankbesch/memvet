@@ -13,6 +13,14 @@
 | [`[stamps]`](#stamps--last-verified-dates-that-must-keep-up--yellow) | last-verified dates that must keep up with the file | YELLOW |
 | [`[secrets]`](#secrets--credentials-that-must-not-be-there--red) | credential-shaped text that must not be there | RED |
 
+Ten rules, five ideas:
+
+- **Referential integrity**: `pointers`, `ids`. Dangling or ambiguous references.
+- **Mutation and provenance**: `append_only`, `human_brief`. Rewritten history, wrong author.
+- **Replication and ownership**: `mirrors`, `blocks`. Copies that disagree, unsafe shared regions.
+- **Freshness and capacity**: `stamps`, `tokens`. Stale or bloated context.
+- **Hygiene tripwires**: `junk`, `secrets`. Things that should not be in the tree.
+
 ## `[mirrors]` — files that must stay identical · RED
 
 Each pair is two files or two directories.

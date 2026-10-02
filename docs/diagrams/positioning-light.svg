@@ -1,0 +1,75 @@
+<svg viewBox="0 0 360 636" xmlns="http://www.w3.org/2000/svg" role="img" font-family='ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace'>
+<title>What memvet checks against what</title>
+<desc>Three inputs go into memvet check: the declared invariants in .memvet.toml, the memory repo as it is in the working tree, and git history for authorship and the base. check reads them and writes nothing. Three things come out: a RED finding, which fails the run with exit 1; a YELLOW finding, which warns and fails only under --strict; and a tree fingerprint, the receipt of the tree it judged. RED and YELLOW go to the human, who edits the repo, the only fix path. The fingerprint goes to CI or a push gate, which acts on the exit status and can hold a later run to the receipt with --expect-tree. No arrow returns to the repo.</desc>
+<rect width="360" height="636" rx="6" fill="#FCFBF9"/>
+<rect x="12" y="16" width="108" height="86" rx="5" fill="#EBE6DD" stroke="#23749E" stroke-width="1.5"/>
+<text x="66" y="39" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">Invariants</text>
+<text x="66" y="57" font-size="12" fill="#6A625A" text-anchor="middle">.memvet.toml</text>
+<text x="66" y="73" font-size="12" fill="#23749E" text-anchor="middle">you write it</text>
+<path d="M66 102 L66 146" fill="none" stroke="#6A625A" stroke-width="1.5"/><polygon points="61,138 71,138 66,146" fill="#6A625A"/>
+<rect x="32.2" y="115" width="67.6" height="18" rx="3" fill="#FCFBF9"/><text x="66" y="128" font-size="12" fill="#6A625A" text-anchor="middle">declared</text>
+<rect x="126" y="16" width="108" height="86" rx="5" fill="#EBE6DD" stroke="#23749E" stroke-width="1.5"/>
+<text x="180" y="39" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">Memory repo</text>
+<text x="180" y="57" font-size="12" fill="#6A625A" text-anchor="middle">CLAUDE.md,</text>
+<text x="180" y="73" font-size="12" fill="#6A625A" text-anchor="middle">notes</text>
+<text x="180" y="89" font-size="12" fill="#23749E" text-anchor="middle">working tree</text>
+<path d="M180 102 L180 146" fill="none" stroke="#6A625A" stroke-width="1.5"/><polygon points="175,138 185,138 180,146" fill="#6A625A"/>
+<rect x="157.0" y="115" width="46.0" height="18" rx="3" fill="#FCFBF9"/><text x="180" y="128" font-size="12" fill="#6A625A" text-anchor="middle">files</text>
+<rect x="240" y="16" width="108" height="86" rx="5" fill="#EBE6DD" stroke="#23749E" stroke-width="1.5"/>
+<text x="294" y="39" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">Git history</text>
+<text x="294" y="57" font-size="12" fill="#6A625A" text-anchor="middle">commits,</text>
+<text x="294" y="73" font-size="12" fill="#6A625A" text-anchor="middle">authors</text>
+<text x="294" y="89" font-size="12" fill="#23749E" text-anchor="middle">base commit</text>
+<path d="M294 102 L294 146" fill="none" stroke="#6A625A" stroke-width="1.5"/><polygon points="289,138 299,138 294,146" fill="#6A625A"/>
+<rect x="263.8" y="115" width="60.4" height="18" rx="3" fill="#FCFBF9"/><text x="294" y="128" font-size="12" fill="#6A625A" text-anchor="middle">history</text>
+<rect x="12" y="146" width="336" height="70" rx="5" fill="#EBE6DD" stroke="#33703F" stroke-width="1.5"/>
+<text x="180" y="169" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">memvet check</text>
+<text x="180" y="187" font-size="12" fill="#6A625A" text-anchor="middle">reads the three, writes nothing</text>
+<text x="180" y="203" font-size="12" fill="#33703F" text-anchor="middle">no --fix, exit 0 or 1</text>
+<path d="M66 216 L66 252" fill="none" stroke="#6A625A" stroke-width="1.5"/><polygon points="61,244 71,244 66,252" fill="#6A625A"/>
+<rect x="12" y="252" width="108" height="102" rx="5" fill="#EBE6DD" stroke="#90302B" stroke-width="1.5"/>
+<text x="66" y="275" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">RED</text>
+<text x="66" y="293" font-size="12" fill="#6A625A" text-anchor="middle">invariant</text>
+<text x="66" y="309" font-size="12" fill="#6A625A" text-anchor="middle">broken</text>
+<text x="66" y="325" font-size="12" fill="#90302B" text-anchor="middle">exit 1</text>
+<path d="M180 216 L180 252" fill="none" stroke="#6A625A" stroke-width="1.5"/><polygon points="175,244 185,244 180,252" fill="#6A625A"/>
+<rect x="126" y="252" width="108" height="102" rx="5" fill="#EBE6DD" stroke="#916A0B" stroke-width="1.5"/>
+<text x="180" y="275" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">YELLOW</text>
+<text x="180" y="293" font-size="12" fill="#6A625A" text-anchor="middle">needs</text>
+<text x="180" y="309" font-size="12" fill="#6A625A" text-anchor="middle">attention</text>
+<text x="180" y="325" font-size="12" fill="#916A0B" text-anchor="middle">exit 1 with</text>
+<text x="180" y="341" font-size="12" fill="#916A0B" text-anchor="middle">--strict</text>
+<path d="M294 216 L294 252" fill="none" stroke="#6A625A" stroke-width="1.5"/><polygon points="289,244 299,244 294,252" fill="#6A625A"/>
+<rect x="240" y="252" width="108" height="102" rx="5" fill="#EBE6DD" stroke="#0084A9" stroke-width="1.5"/>
+<text x="294" y="275" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">Fingerprint</text>
+<text x="294" y="293" font-size="12" fill="#6A625A" text-anchor="middle">tree it</text>
+<text x="294" y="309" font-size="12" fill="#6A625A" text-anchor="middle">judged</text>
+<text x="294" y="325" font-size="12" fill="#0084A9" text-anchor="middle">receipt</text>
+<path d="M66 354 L66 402" fill="none" stroke="#90302B" stroke-width="2"/><polygon points="61,394 71,394 66,402" fill="#90302B"/>
+<path d="M180 354 L180 376 L130 376 L130 402" fill="none" stroke="#916A0B" stroke-width="1.5"/><polygon points="125,394 135,394 130,402" fill="#916A0B"/>
+<path d="M294 354 L294 402" fill="none" stroke="#0084A9" stroke-width="1.5" stroke-dasharray="5 4"/><polygon points="289,394 299,394 294,402" fill="#0084A9"/>
+<rect x="242.2" y="367" width="103.6" height="18" rx="3" fill="#FCFBF9"/><text x="294" y="380" font-size="12" fill="#0084A9" text-anchor="middle">--expect-tree</text>
+<rect x="12" y="402" width="164" height="70" rx="5" fill="#EBE6DD" stroke="#6A625A" stroke-width="1.5"/>
+<text x="94" y="425" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">You edit the repo</text>
+<text x="94" y="443" font-size="12" fill="#6A625A" text-anchor="middle">the only fix path</text>
+<text x="94" y="459" font-size="12" fill="#6A625A" text-anchor="middle">human</text>
+<rect x="184" y="402" width="164" height="70" rx="5" fill="#EBE6DD" stroke="#6A625A" stroke-width="1.5"/>
+<text x="266" y="425" font-size="12.5" fill="#2B2926" text-anchor="middle" font-weight="600">CI or push gate</text>
+<text x="266" y="443" font-size="12" fill="#6A625A" text-anchor="middle">acts on exit status</text>
+<text x="266" y="459" font-size="12" fill="#6A625A" text-anchor="middle">holds the receipt</text>
+<text x="16" y="500" font-size="12" fill="#6A625A">No arrow returns to the repo: check never</text>
+<text x="16" y="517" font-size="12" fill="#6A625A">writes a file.</text>
+<text x="16" y="548" font-size="12.5" fill="#2B2926" font-weight="600">Legend</text>
+<rect x="16" y="560" width="16" height="11" rx="2.5" fill="#EBE6DD" stroke="#23749E" stroke-width="1.5"/>
+<text x="40" y="570" font-size="12" fill="#6A625A">Input</text>
+<rect x="188" y="560" width="16" height="11" rx="2.5" fill="#EBE6DD" stroke="#33703F" stroke-width="1.5"/>
+<text x="212" y="570" font-size="12" fill="#6A625A">memvet</text>
+<rect x="16" y="582" width="16" height="11" rx="2.5" fill="#EBE6DD" stroke="#90302B" stroke-width="1.5"/>
+<text x="40" y="592" font-size="12" fill="#6A625A">RED: run fails</text>
+<rect x="188" y="582" width="16" height="11" rx="2.5" fill="#EBE6DD" stroke="#916A0B" stroke-width="1.5"/>
+<text x="212" y="592" font-size="12" fill="#6A625A">YELLOW: warning</text>
+<rect x="16" y="604" width="16" height="11" rx="2.5" fill="#EBE6DD" stroke="#0084A9" stroke-width="1.5"/>
+<text x="40" y="614" font-size="12" fill="#6A625A">Receipt</text>
+<rect x="188" y="604" width="16" height="11" rx="2.5" fill="#EBE6DD" stroke="#6A625A" stroke-width="1.5"/>
+<text x="212" y="614" font-size="12" fill="#6A625A">Human or gate</text>
+</svg>

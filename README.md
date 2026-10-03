@@ -26,7 +26,7 @@ folder of notes into context on every run. Those files drift silently:
 Nothing fails. The agent just works from something that is no longer true.
 memvet turns each of those into a RED finding with a file, a line, and a code.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/positioning-dark.svg"/><img width="400" align="top" src="docs/diagrams/positioning-light.svg" alt="Diagram: what memvet checks against what. Text version below."/></picture> <picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/push-gate-dark.svg"/><img width="400" align="top" src="docs/diagrams/push-gate-light.svg" alt="Diagram: one push through a gate built on check and fingerprint. Text version below."/></picture>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/positioning-dark.svg"/><img width="400" align="top" src="docs/diagrams/positioning-light.svg" alt="Diagram: what memvet checks against what. Text version below."/></picture> <picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/push-gate-dark.svg"/><img width="400" align="top" src="docs/diagrams/push-gate-light.svg" alt="Diagram: one push through a gate built on check and fingerprint. Text version below."/></picture></p>
 
 <details><summary>Text version of the diagrams</summary>
 
@@ -54,7 +54,7 @@ human.
 [examples/broken](examples/broken) is a three-file memory repo with two
 defects. Its config, and what `memvet check` prints for it:
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/example-config-dark.svg"/><img width="400" align="top" src="docs/diagrams/example-config-light.svg" alt="Terminal: the .memvet.toml of examples/broken. Text version below."/></picture> <picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/example-output-dark.svg"/><img width="400" align="top" src="docs/diagrams/example-output-light.svg" alt="Terminal: what memvet check examples/broken prints. Text version below."/></picture>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/example-config-dark.svg"/><img width="400" align="top" src="docs/diagrams/example-config-light.svg" alt="Terminal: the .memvet.toml of examples/broken. Text version below."/></picture> <picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/example-output-dark.svg"/><img width="400" align="top" src="docs/diagrams/example-output-light.svg" alt="Terminal: what memvet check examples/broken prints. Text version below."/></picture></p>
 
 <details><summary>The config and the output as text</summary>
 
@@ -85,17 +85,15 @@ plain-English entry in [docs/findings.md](docs/findings.md).
 ## Install
 
 ```bash
+# Pick one install. Homebrew:
 brew install frankbesch/tap/memvet
-```
 
-```bash
+# or Go:
 go install \
   github.com/frankbesch/memvet@latest
-```
 
-Or try it once, without installing, on the repo you are in:
-
-```bash
+# or try it once, no install,
+# on the repo you are in:
 go run \
   github.com/frankbesch/memvet@latest \
   check .

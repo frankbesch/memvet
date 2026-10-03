@@ -5,7 +5,7 @@ docs are under docs/. D-### references are the maintainer's decision log and
 are not part of this repository. -->
 
 # memlint — Claude Code build prompt (v0.1)
-# Usage: run from a fresh empty repo folder. Start in plan mode.
+\# Usage: run from a fresh empty repo folder. Start in plan mode.
 
 Build a Go CLI called `memlint` — an invariant checker (think fsck, not
 ESLint) for file-based agent memory systems: repos of markdown that AI
@@ -51,12 +51,12 @@ mode, semantic/content linting, config generation.
 
 Start in plan mode: plan + file layout before code.
 
-# --- v0.2 addendum: agent-cohabitation rules (approved 2026-08-03) ---
-# Source: promptkits/models/agent-cohabitation-contract.md, distilled from
-# langchain-ai/openwiki. Adopted: ownership-block structure, human-brief
-# authorship. Rejected: no-op commit detection (history hygiene, low
-# value), repair-marker/degraded-output validation (semantic linting,
-# stays a non-goal).
+## v0.2 addendum: agent-cohabitation rules (approved 2026-08-03)
+\# Source: promptkits/models/agent-cohabitation-contract.md, distilled from
+\# langchain-ai/openwiki. Adopted: ownership-block structure, human-brief
+\# authorship. Rejected: no-op commit detection (history hygiene, low
+\# value), repair-marker/degraded-output validation (semantic linting,
+\# stays a non-goal).
 
 New rules (same contract: read-only, section presence enables):
 6. [blocks] files=[...], start="...", end="..." — each listed file must
@@ -92,7 +92,7 @@ start docs/generated.md): acceptance becomes 7 red + 2 yellow.
 [append_only]: fixture files are committed by the repo's human author,
 so a hermetic violation cannot be expressed there.
 
-# --- v0.3 addendum: version + releases (approved 2026-08-10) ---
+## v0.3 addendum: version + releases (approved 2026-08-10)
 
 `memlint --version` prints "memlint <version>" to stdout and exits 0.
 Top-level flag only, not a subcommand and not a `check` flag — the
@@ -109,7 +109,7 @@ The ldflags symbol is pinned by a test that builds with -X and asserts
 the output, so renaming the variable breaks tests before it breaks
 releases.
 
-# --- v0.4 addendum: critique fixes + adds (approved 2026-08-10) ---
+## v0.4 addendum: critique fixes + adds (approved 2026-08-10)
 
 Fix — [tokens] zero-match watch glob: a watch glob that matches no file
 is YELLOW ("watch glob matched no files"), one finding per glob, path =
@@ -152,7 +152,7 @@ Add — Homebrew tap: goreleaser brews block publishing to
 frankbesch/homebrew-tap. Prerequisites (manual, before next tag): create
 the tap repo, add a TAP_GITHUB_TOKEN secret with write access to it.
 
-# --- v0.5 addendum: base-ref append_only (approved 2026-08-10) ---
+## v0.5 addendum: base-ref append_only (approved 2026-08-10)
 
 `memlint check --base <ref> [path]` makes [append_only] compare each file
 against <ref> instead of HEAD, turning the rule into a pull-request gate:
@@ -177,7 +177,7 @@ nothing is the failure mode this tool exists to refuse). Default behavior
 without --base is unchanged (HEAD, working-tree guard, committed rewrite
 goes quiet — still pinned by test).
 
-# --- v0.6 addendum: pointers grow up (approved 2026-08-11) ---
+## v0.6 addendum: pointers grow up (approved 2026-08-11)
 
 Anchor-aware [pointers]. A candidate containing exactly one "#" splits
 into base path + anchor. The base must independently survive every
@@ -212,7 +212,7 @@ a zero-match glob. Acceptance becomes 8 red + 4 yellow. New guards pin
 what still must NOT be reported: multi-"#" candidates and URL fragments.
 fixture-clean gains a resolving anchored ref and a matching files glob.
 
-# --- v0.7 addendum: self-describing findings (approved 2026-08-11) ---
+## v0.7 addendum: self-describing findings (approved 2026-08-11)
 
 Every finding links to its own explanation, keyed by the stable codes
 v0.4 introduced. No explain subcommand: the subcommand restraint stands
@@ -240,7 +240,7 @@ codes existed but were invisible exactly where humans read findings.
 --format github is unchanged: annotations already carry the code in
 their title, and workflow commands have no link field.
 
-# --- v0.8 addendum: two-tier [tokens] (approved 2026-08-30) ---
+## v0.8 addendum: two-tier [tokens] (approved 2026-08-30)
 
 Add — [tokens] limit=M: an optional hard tier above budget. Past budget
 stays YELLOW tokens/over-budget; past limit is RED tokens/over-limit
@@ -254,10 +254,10 @@ fixture-broken: [tokens] gains limit=400 and memory/medium.md
 (250 tokens, between the tiers); big.md (420) upgrades to RED.
 Acceptance becomes 9 red + 4 yellow.
 
-# --- v0.7.0 release addendum, part 1: rotation-aware [append_only] (approved 2026-09-05) ---
-# Source: promptkits D-126 (decisions-log rotation) and D-127. Tags stop at
-# v0.6.0; the v0.7 and v0.8 addenda above shipped untagged and land in the
-# same v0.7.0 release as this one.
+## v0.7.0 release addendum, part 1: rotation-aware [append_only] (approved 2026-09-05)
+\# Source: promptkits D-126 (decisions-log rotation) and D-127. Tags stop at
+\# v0.6.0; the v0.7 and v0.8 addenda above shipped untagged and land in the
+\# same v0.7.0 release as this one.
 
 Motivation: FBOS rotated memory/decisions.md — D-001–D-100 moved verbatim
 to memory/archive/20260905-decisions-vol1-D001-D100.md, the live file kept
@@ -303,10 +303,10 @@ whole-line matching. Fixture: testdata/fixture-rotated (baseline/ +
 rotated tree; TestFixtureRotated builds the git state). fixture-broken
 unchanged: 9 red + 4 yellow.
 
-# --- v0.7.0 release addendum, part 2: [ids] (approved 2026-09-05) ---
-# Source: promptkits D-127 — two sessions wrote D-102 on 2026-09-01;
-# next-id.sh prevents new collisions upstream but cannot see the file, and
-# nothing in memlint checked id uniqueness.
+## v0.7.0 release addendum, part 2: [ids] (approved 2026-09-05)
+\# Source: promptkits D-127 — two sessions wrote D-102 on 2026-09-01;
+\# next-id.sh prevents new collisions upstream but cannot see the file, and
+\# nothing in memlint checked id uniqueness.
 
 8. [ids] files=[...] (literals and globs, the [pointers] files resolver:
    root-relative globs, literals in config order then glob matches in walk
@@ -345,7 +345,7 @@ D-102, first memory/decisions.md:43, again memory/decisions.md:58, the
 receipt D-127 already records. RULED (Frank, 2026-09-05, same day): the
 delimiter form "^(D-\\d{3}) \\|" IS the default; the bare form is opt-in.
 
-# --- v0.7.0 release addendum, part 3: [ids] known (Frank ruled "A", 2026-09-05) ---
+## v0.7.0 release addendum, part 3: [ids] known (Frank ruled "A", 2026-09-05)
 
 Add — [ids] known = [...]: ids whose collision is recorded and reconciled
 (D-127: neither D-102 entry may be edited, so the RED was permanent and
@@ -356,7 +356,7 @@ ids/known-unused — a stale entry would silently excuse a future collision
 of that id (the tokens/no-match posture). Config rejects empty and
 duplicate known entries.
 
-# --- v0.8 addendum, part 1: recursive ** globs (approved 2026-09-05) ---
+## v0.8 addendum, part 1: recursive ** globs (approved 2026-09-05)
 
 Every glob-taking key ([junk] globs, [tokens] watch, [pointers] files,
 [ids] files) accepts "**" as a WHOLE path segment matching zero or more
@@ -367,7 +367,7 @@ load error. One translator (lint.GlobToRegexp) serves matching and
 validation. [junk] keeps its basename match as well. Removes the v0.1
 non-goal and the v0.6 "** stays rejected" clause.
 
-# --- v0.8 addendum, parts 2-4 (approved 2026-09-05) ---
+## v0.8 addendum, parts 2-4 (approved 2026-09-05)
 
 2. [blocks] mirror = true: content between the markers identical across
    the listed files; first listed file is the reference; RED
@@ -381,7 +381,7 @@ non-goal and the v0.6 "** stays rejected" clause.
 4. [human_brief] follow_renames = true: git log --follow, so an agent
    commit under an earlier name stays a violation. Off by default.
 
-# --- v0.8 addendum, parts 5-6: [ids] cited_in + ordered (approved 2026-09-05) ---
+## v0.8 addendum, parts 5-6: [ids] cited_in + ordered (approved 2026-09-05)
 
 5. [ids] cited_in = [...] (same resolver), cite_pattern = "\\b(D-\\d{3})\\b"
    (default): every cited id in those files must be an entry collected
@@ -396,7 +396,7 @@ non-goal and the v0.6 "** stays rejected" clause.
    into [ids] rather than [append_only]: the invariant is about ids, and
    the prefix rule cannot see a committed mid-file paste anyway.
 
-# --- v0.8 addendum, parts 7-8: [stamps] and [secrets] (approved 2026-09-05) ---
+## v0.8 addendum, parts 7-8: [stamps] and [secrets] (approved 2026-09-05)
 
 7. [stamps] files=[...] (mixed resolver), max_age_days=N (>0),
    pattern (default "(?i)last[ -]verified:?\\s*(\\d{4}-\\d{2}-\\d{2})",
@@ -415,7 +415,7 @@ non-goal and the v0.6 "** stays rejected" clause.
    secrets/no-match. Source: D-057 / FF-010 tripwire; --changed (part 9)
    makes it a pre-commit check.
 
-# --- v0.8 addendum, part 9: --changed (approved 2026-09-05) ---
+## v0.8 addendum, part 9: --changed (approved 2026-09-05)
 
 memlint check --changed [path]: changed = `git diff --name-only --relative
 HEAD -- .` ∪ `git ls-files --others --exclude-standard -- .`, relative to
@@ -427,7 +427,7 @@ unchanged files before their git call. No git / not a repository = exit 2
 (the --base posture: an explicit demand that cannot be honored must not
 silently widen). Output formats and exit codes otherwise unchanged.
 
-# --- v0.9 futures (listed 2026-09-05) ---
+## v0.9 futures (listed 2026-09-05)
 
 1. [pointers] dead-anchor — APPROVED for build 2026-09-08 (FBOS D-136);
    see v0.9 addendum part 2 below. Built 2026-09-08 (v0.9.1).
@@ -439,15 +439,15 @@ silently widen). Output formats and exit codes otherwise unchanged.
    the gap is covered by `[secrets] patterns` per corpus. Not a behavior
    change; no gates beyond G-all.
 
-# --- v0.9 addendum, part 1: tree fingerprint (Frank ruled 2026-09-08) ---
-# Source: Paper Forge PF-0106 (Graft, NanoNets): every query fingerprints
-# the working tree before answering, so an answer describes the tree as it
-# is now. FBOS lesson 021 / D-053: a checked fact has a shelf life. memlint
-# runs in ~0.5 s on FBOS, so a skip-if-unchanged cache buys nothing; the
-# adopted idea is the RECEIPT — the verdict names the tree it judged, and a
-# later step can demand that same tree. Graft itself is not adopted for
-# FBOS or AIPOS (it indexes code only, writes into ~/.claude and ~/.codex,
-# and phones home by default).
+## v0.9 addendum, part 1: tree fingerprint (Frank ruled 2026-09-08)
+\# Source: Paper Forge PF-0106 (Graft, NanoNets): every query fingerprints
+\# the working tree before answering, so an answer describes the tree as it
+\# is now. FBOS lesson 021 / D-053: a checked fact has a shelf life. memlint
+\# runs in ~0.5 s on FBOS, so a skip-if-unchanged cache buys nothing; the
+\# adopted idea is the RECEIPT — the verdict names the tree it judged, and a
+\# later step can demand that same tree. Graft itself is not adopted for
+\# FBOS or AIPOS (it indexes code only, writes into ~/.claude and ~/.codex,
+\# and phones home by default).
 
 memlint fingerprint [path]: prints one line, the 64-hex SHA-256 of the
 tree memlint would check: for every visible regular file, sorted by
@@ -484,7 +484,7 @@ G4 CHECK gofmt -l is empty, go vet clean, go test ./... passes, and
 G5 CHECK `check --strict .` on promptkits EXPECT under 1.0 s wall
    (baseline 0.56 s) and a fingerprint identical across two runs.
 
-# --- v0.9 addendum, part 2: [pointers] dead-anchor (approved 2026-09-08, D-136; built 2026-09-08) ---
+## v0.9 addendum, part 2: [pointers] dead-anchor (approved 2026-09-08, D-136; built 2026-09-08)
 
 A reference of the form "file.md#anchor" resolves the file today and
 ignores the anchor (reserved since v0.6). Dead-anchor makes the anchor
@@ -513,7 +513,7 @@ G4 CHECK gofmt -l empty, go vet clean, go test ./... passes; README, CI
 G5 CHECK `check --strict ~/Documents/promptkits` EXPECT clean with no new
    findings (FBOS pointer sources carry no anchored refs today).
 
-# --- v0.10 addendum, docs note (shipped 2026-09-11, docs-only, no ruling required) ---
+## v0.10 addendum, docs note (shipped 2026-09-11, docs-only, no ruling required)
 
 README became the landing page (7 KB); reference sections moved verbatim to
 docs/cli.md, configuration.md, rules.md, tree-receipts.md, development.md;
@@ -524,7 +524,7 @@ byte-identical to the real run. No rule, flag, or output changed. Commits
 5e2478b, 632c0f2, 0547303. Source: Astral review 2026-09-11, items 1-5,
 9, 13-17.
 
-# --- v0.10 addendum, part 1: flags anywhere around the path (approved 2026-09-11, D-143 §1) ---
+## v0.10 addendum, part 1: flags anywhere around the path (approved 2026-09-11, D-143 §1)
 
 Today `memlint check . --strict` is refused with exit 2 because the stdlib
 parser stops at the first positional and a silently ignored flag is worse
@@ -551,7 +551,7 @@ G5 CHECK `check --strict ~/Documents/promptkits` EXPECT clean.
 G6 CHECK post-push CI run green on ubuntu and macos (`gh run watch
    --exit-status`), cited by run id.
 
-# --- v0.10 addendum, part 2: per-command help (approved 2026-09-11, D-143 §2) ---
+## v0.10 addendum, part 2: per-command help (approved 2026-09-11, D-143 §2)
 
 One usageText serves every command today. Split it: `memlint --help` fits
 one screen (name line, three commands with one-line purposes, "run memlint
@@ -572,7 +572,7 @@ G3 CHECK `init --help` contains "never overwrite"; `fingerprint --help`
 G4 CHECK `check --bogus` stderr contains the check help, not the init help.
 G5 gofmt/vet/test green; fixtures unchanged. G6 CI green, run id cited.
 
-# --- v0.10 addendum, part 3: init reports what it inferred (approved 2026-09-11, D-143 §3) ---
+## v0.10 addendum, part 3: init reports what it inferred (approved 2026-09-11, D-143 §3)
 
 init keeps its contract: evidence enables a rule; guesses never do; O_EXCL
 refuses to overwrite. Two changes. (a) The generated file is trimmed to a
@@ -603,7 +603,7 @@ G3 CHECK generated file line count on G1's tree EXPECT <= 30.
 G4 CHECK TestInitRefusesOverwrite unchanged and green.
 G5 gofmt/vet/test green; fixtures unchanged. G6 CI green, run id cited.
 
-# --- v0.10 addendum, part 4: init --dry-run (approved 2026-09-11, D-143 §4) ---
+## v0.10 addendum, part 4: init --dry-run (approved 2026-09-11, D-143 §4)
 
 `memlint init --dry-run [path]` performs the same inspection, prints the
 report to stderr and the config that WOULD be written to stdout, and
@@ -624,7 +624,7 @@ Release: parts 1-4 ship together as v0.10.0. Docs touched: docs/cli.md
 (delete the flag-order paragraph, add --dry-run), README quick start
 (one line on the init report), docs/development.md roadmap.
 
-# --- v0.10 parts 1-4: build receipt (built 2026-09-11, D-143) ---
+## v0.10 parts 1-4: build receipt (built 2026-09-11, D-143)
 
 Gates run against the working tree that became this commit:
 G1-G3 (all parts) CHECK `go test ./...` EXPECT ok for internal/cli,
@@ -645,34 +645,34 @@ G5 CHECK `check --strict ~/Documents/promptkits` EXPECT clean, and the same
 G6 CI run id recorded in the commit that follows this one if it is not
    green on the first push; otherwise cited in the handoff.
 
-# --- v0.11 addendum: gap closure vs agents-lint / ctxlint / claude-healthcheck (approved 2026-09-11, D-144 §1-6) ---
-# Source: 2026-09-11 competitor read of giacomo/agents-lint, YawLabs/ctxlint,
-# mister-no-one/claude-healthcheck (READMEs only, code not read; a Codex
-# cross-check the same day corrected two claims, verified against the
-# READMEs before this header was fixed). Among those three, no equivalent
-# was found for append_only against a git baseline, human_brief authorship
-# from git history, ids uniqueness/order/citation, blocks ownership, exact
-# declared mirrors, or tree receipts. ctxlint is the closest neighbour and
-# already covers memory hygiene (session-stale-memory: memory entries whose
-# paths no longer exist; session-memory-index-overflow: MEMORY.md past the
-# Claude Code load cap) plus MCP, skills, sessions, SARIF, a GitHub Action,
-# pre-commit and an MCP server; its distinction from memlint is built-in
-# health model vs owner-declared invariants, not codebase vs memory.
-# agents-lint checks paths, npm scripts, dependencies, framework staleness,
-# structure and Claude memory-file links; it has no secrets, junk, or
-# token-budget rule (an earlier read conflated it with another project).
-# claude-healthcheck is read-only too; memlint's distinction is that
-# `check` has no fix mode at the contract level, while ctxlint and
-# agents-lint expose --fix. memlint is behind on first-run friction: both
-# linters run on a bare `npx` with no config, both check the Claude Code
-# auto-memory folder, and ctxlint ships a GitHub Action and a pre-commit
-# hook. The parts below close the cheap gaps only. Explicitly NOT pursued:
-# --fix (hard rule 1), an MCP server (scope, no dependency budget), checks
-# of context files against the codebase (npm scripts, framework staleness:
-# a different product), SARIF (no consumer yet), and a score (advisory,
-# not a gate).
+## v0.11 addendum: gap closure vs agents-lint / ctxlint / claude-healthcheck (approved 2026-09-11, D-144 §1-6)
+\# Source: 2026-09-11 competitor read of giacomo/agents-lint, YawLabs/ctxlint,
+\# mister-no-one/claude-healthcheck (READMEs only, code not read; a Codex
+\# cross-check the same day corrected two claims, verified against the
+\# READMEs before this header was fixed). Among those three, no equivalent
+\# was found for append_only against a git baseline, human_brief authorship
+\# from git history, ids uniqueness/order/citation, blocks ownership, exact
+\# declared mirrors, or tree receipts. ctxlint is the closest neighbour and
+\# already covers memory hygiene (session-stale-memory: memory entries whose
+\# paths no longer exist; session-memory-index-overflow: MEMORY.md past the
+\# Claude Code load cap) plus MCP, skills, sessions, SARIF, a GitHub Action,
+\# pre-commit and an MCP server; its distinction from memlint is built-in
+\# health model vs owner-declared invariants, not codebase vs memory.
+\# agents-lint checks paths, npm scripts, dependencies, framework staleness,
+\# structure and Claude memory-file links; it has no secrets, junk, or
+\# token-budget rule (an earlier read conflated it with another project).
+\# claude-healthcheck is read-only too; memlint's distinction is that
+\# `check` has no fix mode at the contract level, while ctxlint and
+\# agents-lint expose --fix. memlint is behind on first-run friction: both
+\# linters run on a bare `npx` with no config, both check the Claude Code
+\# auto-memory folder, and ctxlint ships a GitHub Action and a pre-commit
+\# hook. The parts below close the cheap gaps only. Explicitly NOT pursued:
+\# --fix (hard rule 1), an MCP server (scope, no dependency budget), checks
+\# of context files against the codebase (npm scripts, framework staleness:
+\# a different product), SARIF (no consumer yet), and a score (advisory,
+\# not a gate).
 
-# --- v0.11 part 1: check runs without a config, and says so (approved 2026-09-11) ---
+## v0.11 part 1: check runs without a config, and says so (approved 2026-09-11)
 
 Today `memlint check` on a tree with no .memlint.toml is exit 2. After
 this part it runs the config `init --dry-run` would print (Enabled
@@ -709,7 +709,7 @@ Estimate: ~60 lines in internal/cli (reuse inspect + renderConfig, parse
 the string through the same loader), one report constant, 4 tests.
 Half a session.
 
-# --- v0.11 part 2: wider index discovery (approved 2026-09-11) ---
+## v0.11 part 2: wider index discovery (approved 2026-09-11)
 
 init and part 1 inference enable [pointers] on any of MEMORY.md,
 CLAUDE.md, AGENTS.md that exist. Add, on the same evidence-only basis:
@@ -728,7 +728,7 @@ G3 gofmt/vet/test green; fixtures unchanged. G4 CI green, run id.
 Estimate: a five-entry list change plus one test. Under an hour; ships
 with part 1.
 
-# --- v0.11 part 3: [pointers] on a flat memory folder (approved 2026-09-11) ---
+## v0.11 part 3: [pointers] on a flat memory folder (approved 2026-09-11)
 
 The Claude Code auto-memory folder (~/.claude/projects/<slug>/memory/) is
 MEMORY.md plus sibling notes, indexed as `- [Title](note.md) — hook`.
@@ -760,7 +760,7 @@ Estimate: ~80 lines across lint/pointers.go, config validation, init;
 5 tests; two doc sections. One session. This is the only part that
 touches a rule's semantics, so it is the one to defer if anything is.
 
-# --- v0.11 part 4: GitHub Action and pre-commit hook (approved 2026-09-11) ---
+## v0.11 part 4: GitHub Action and pre-commit hook (approved 2026-09-11)
 
 Add `action.yml` at the repo root: a composite action that downloads the
 release binary for the runner's OS/arch from the tagged release, verifies
@@ -784,7 +784,7 @@ Estimate: ~50 lines of YAML, two doc snippets, one CI job. Half a
 session, but G1 needs a tag to resolve `version: latest`, so it is
 verified against the v0.11.0 release, not before.
 
-# --- v0.11 part 5: run once without installing (approved 2026-09-11, docs only) ---
+## v0.11 part 5: run once without installing (approved 2026-09-11, docs only)
 
 README install section adds `go run github.com/frankbesch/memlint@latest
 check .` as the try-it line, matching the competitors' `npx` one-liner.
@@ -793,7 +793,7 @@ Nothing to gate beyond the README output test staying green.
 Release: parts 1, 2, 4, 5 ship as v0.11.0 in about two sessions. Part 3
 adds a third session and can follow as v0.11.1 without a visible gap.
 
-# --- v0.11 parts 1-5: build receipt (built 2026-09-11, D-144; released v0.11.0, CI 34639081021, release run 34639549431) ---
+## v0.11 parts 1-5: build receipt (built 2026-09-11, D-144; released v0.11.0, CI 34639081021, release run 34639549431)
 
 Gates run against the working tree that became this commit:
 G1-G5 (part 1) CHECK `go test ./internal/cli` EXPECT ok. The declared
@@ -838,7 +838,7 @@ G-FBOS CHECK `check --strict ~/Documents/promptkits` EXPECT clean (8 rules,
 G-CI CHECK CI run 34639081021 EXPECT success: test (ubuntu), test (macos),
    action — all green on the first push. Release run 34639549431 green.
 
-# --- v0.11.1: flat-memory inference threshold (ruled 2026-09-16) ---
+## v0.11.1: flat-memory inference threshold (ruled 2026-09-16)
 
 Defect found by the 2026-09-16 hands-on test of v0.11.0: part 3's init
 condition "beside two or more .md files" meant `memlint check` on a
@@ -868,7 +868,7 @@ nor `base` was set. Now `${args[@]+"${args[@]}"}`. Receipt: the two
 expansions run on /bin/bash 3.2.57 with an empty and a one-element array.
 Ships with the next tag; @v0.11.1 is unchanged.
 
-# --- v0.12.0: rename memlint to memvet (ruled 2026-09-17, D-164) ---
+## v0.12.0: rename memlint to memvet (ruled 2026-09-17, D-164)
 
 Why: D-144 §6 fixed the positioning as declared invariants with no fix mode
 at the contract level, which is `go vet`'s posture, not a linter's. The
@@ -919,7 +919,7 @@ frankbesch/homebrew-tap (memlint.rb removed, tap 4aaff72); `go install
 github.com/frankbesch/memvet@v0.12.0` resolves and prints v0.12.0;
 ~/go/bin/memvet installed, ~/go/bin/memlint removed.
 
-# --- v0.12.x: [secrets] honors .gitignore (ruled 2026-09-20, D-191 item 9) ---
+## v0.12.x: [secrets] honors .gitignore (ruled 2026-09-20, D-191 item 9)
 
 Correctness fix to the existing rule, carved out of the D-143 §6 freeze by
 D-191; no new rule, flag, or finding code; no version bump or tag before
@@ -954,7 +954,7 @@ G6 CHECK new binary `check --strict ~/Documents/promptkits` EXPECT clean;
    `~/go/bin/memvet` not replaced by the build.
 Receipt: promptkits reviews/2026-09-20-fund-build/memvet.md.
 
-# --- v0.12.x: [secrets] card detector checks issuer and decimal context (ruled 2026-09-29, D-230) ---
+## v0.12.x: [secrets] card detector checks issuer and decimal context (ruled 2026-09-29, D-230)
 
 Correctness fix to the existing rule under D-230; no new rule, flag,
 config key, or finding code; no version bump or tag before GoReleaser

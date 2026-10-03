@@ -35,11 +35,11 @@ OUTPUT = [
 # examples/broken/.memvet.toml, as the README quotes it. (column, text, colour key)
 CONFIG = [
     [(0, "examples/broken/.memvet.toml", "ink2")],
-    [(0, "[pointers]", BLUE)],
+    [(0, "[pointers]", "ink")],
     [(0, 'files = ["MEMORY.md"]', "ink")],
     [(0, 'roots = ["memory"]', "ink")],
     [],
-    [(0, "[tokens]", BLUE)],
+    [(0, "[tokens]", "ink")],
     [(0, 'watch = ["MEMORY.md", "memory/*.md"]', "ink")],
     [(0, "budget = 400", "ink")],
 ]
@@ -74,8 +74,14 @@ def terminal(heading, rows, foot, title, desc, c, spread=0.0, h=0):
     y -= 6
     for line in rows:
         for col, s, k in line:
-            fill = c[k] if isinstance(k, str) else c["series"][k]
-            b.append(text(M + 4 + col * 12 * CH, y, s, 12, fill, weight=600 if k in (RED, OCHRE) else None))
+            x = M + 4 + col * 12 * CH
+            if isinstance(k, str):
+                b.append(text(x, y, s, 12, c[k]))
+                continue
+            # A series key marks a severity or a section: the colour goes on a
+            # swatch before the word, and the word wears ink (FBOS D-273).
+            b.append(f'<rect x="{x - 8.5:g}" y="{y - 8:g}" width="6" height="6" rx="1.5" fill="{c["series"][k]}"/>')
+            b.append(text(x, y, s, 12, c["ink"], weight=600))
         y += 19 + round(10 * spread)
     lines, y = note(y + 8, foot, c)
     return svg(max(y, h), title, desc, b + lines, c)
@@ -150,7 +156,7 @@ def push_gate(c, spread=0.0, h=0):
     b, y = head("Gating a push on memvet", c)
     y -= 12
     for i, (label, sub, nxt) in enumerate(steps):
-        edge = c["series"][GREEN] if i == 0 else c["rule"]
+        edge = c["series"][GREEN] if i == 0 else c["ink2"]
         b.append(f'<rect x="{M}" y="{y}" width="{R - M}" height="46" rx="4" fill="{c["tint"]}" stroke="{edge}"/>')
         b.append(text(M + 14, y + 19, label, 13, c["ink"], weight=600))
         b.append(text(M + 14, y + 37, sub, 12, c["ink2"]))

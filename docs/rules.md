@@ -1,17 +1,17 @@
 # Rules
 
-| Rule | Invariant | Severity |
-|------|-----------|----------|
-| [`[mirrors]`](#mirrors--files-that-must-stay-identical--red) | copies that must stay byte-identical | RED |
-| [`[append_only]`](#append_only--logs-that-may-only-grow--red) | logs that may only grow | RED |
-| [`[blocks]`](#blocks--ownership-blocks-that-must-stay-well-formed--red) | agent-owned regions that must stay well-formed | RED |
-| [`[human_brief]`](#human_brief--files-agents-must-never-write--red) | files no agent may ever have written | RED |
-| [`[pointers]`](#pointers--references-that-must-resolve--red) | references that must resolve | RED |
-| [`[junk]`](#junk--files-that-should-not-be-there--yellow) | files that should not be there | YELLOW |
-| [`[tokens]`](#tokens--notes-that-got-too-expensive--yellow--red) | notes that outgrew their token budget | YELLOW / RED |
-| [`[ids]`](#ids--ids-that-must-be-unique--red) | ids that must be unique across files | RED |
-| [`[stamps]`](#stamps--last-verified-dates-that-must-keep-up--yellow) | last-verified dates that must keep up with the file | YELLOW |
-| [`[secrets]`](#secrets--credentials-that-must-not-be-there--red) | credential-shaped text that must not be there | RED |
+| Rule | Invariant, severity |
+|------|--------------------|
+| [`[mirrors]`](#mirrors--files-that-must-stay-identical--red) | copies that must stay byte-identical: RED |
+| [`[append_only]`](#append_only--logs-that-may-only-grow--red) | logs that may only grow: RED |
+| [`[blocks]`](#blocks--ownership-blocks-that-must-stay-well-formed--red) | agent-owned regions that must stay well-formed: RED |
+| [`[human_brief]`](#human_brief--files-agents-must-never-write--red) | files no agent may ever have written: RED |
+| [`[pointers]`](#pointers--references-that-must-resolve--red) | references that must resolve: RED |
+| [`[junk]`](#junk--files-that-should-not-be-there--yellow) | files that should not be there: YELLOW |
+| [`[tokens]`](#tokens--notes-that-got-too-expensive--yellow--red) | notes that outgrew their token budget: YELLOW / RED |
+| [`[ids]`](#ids--ids-that-must-be-unique--red) | ids that must be unique across files: RED |
+| [`[stamps]`](#stamps--last-verified-dates-that-must-keep-up--yellow) | last-verified dates that must keep up with the file: YELLOW |
+| [`[secrets]`](#secrets--credentials-that-must-not-be-there--red) | credential-shaped text that must not be there: RED |
 
 Ten rules, five ideas:
 

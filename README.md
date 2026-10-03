@@ -26,9 +26,9 @@ folder of notes into context on every run. Those files drift silently:
 Nothing fails. The agent just works from something that is no longer true.
 memvet turns each of those into a RED finding with a file, a line, and a code.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/positioning-dark.svg"/><img width="400" align="top" src="docs/diagrams/positioning-light.svg" alt="Diagram: what memvet checks against what. Text version below."/></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/positioning-dark.svg"/><img width="400" align="top" src="docs/diagrams/positioning-light.svg" alt="Diagram: what memvet checks against what. Text version below."/></picture> <picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/push-gate-dark.svg"/><img width="400" align="top" src="docs/diagrams/push-gate-light.svg" alt="Diagram: one push through a gate built on check and fingerprint. Text version below."/></picture>
 
-<details><summary>Text version of this diagram</summary>
+<details><summary>Text version of the diagrams</summary>
 
 Three inputs go into `memvet check`: the invariants declared in `.memvet.toml`,
 the memory repo as it is in the working tree, and git history for authorship
@@ -39,12 +39,24 @@ human, who edits the repo, the only fix path. The fingerprint goes to CI or a
 push gate, which can hold a later run to it with `--expect-tree`. No arrow
 returns to the repo.
 
+A gate script runs `memvet check --strict`; RED means exit 1 and stop. On a
+clean run it runs `memvet fingerprint` and writes a marker, `.git/push-ok`,
+naming the checks passed, the time, and the tree. On `git push origin main`
+the pre-push hook reads the marker and fingerprints the tree again. A marker
+under 10 minutes old with a matching tree allows one plain push and is
+consumed. A stale marker, a moved tree, or a push that is not plain asks a
+human.
+
 </details>
 
 ## 60-second example
 
 [examples/broken](examples/broken) is a three-file memory repo with two
-defects. Its config:
+defects. Its config, and what `memvet check` prints for it:
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/example-config-dark.svg"/><img width="400" align="top" src="docs/diagrams/example-config-light.svg" alt="Terminal: the .memvet.toml of examples/broken. Text version below."/></picture> <picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/example-output-dark.svg"/><img width="400" align="top" src="docs/diagrams/example-output-light.svg" alt="Terminal: what memvet check examples/broken prints. Text version below."/></picture>
+
+<details><summary>The config and the output as text</summary>
 
 ```toml
 [pointers]
@@ -55,10 +67,6 @@ roots = ["memory"]
 watch = ["MEMORY.md", "memory/*.md"]
 budget = 400
 ```
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/example-output-dark.svg"/><img width="400" align="top" src="docs/diagrams/example-output-light.svg" alt="Terminal: what memvet check examples/broken prints. Text version below."/></picture>
-
-<details><summary>The output as text</summary>
 
 <!-- examples/broken output: kept identical to the real run by TestReadmeOutputMatchesExample -->
 ```text
@@ -159,21 +167,8 @@ makes that base reachable. A complete pull-request workflow using
 Every `check` summary ends with a fingerprint of the exact tree it judged,
 and `--expect-tree` holds a later run to it: a tree that changed in between
 is one RED finding. memvet stores nothing; the caller keeps the receipt. A
-push gate built on that looks like this:
+push gate built on that is drawn under [The failure mode](#the-failure-mode).
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/push-gate-dark.svg"/><img width="400" align="top" src="docs/diagrams/push-gate-light.svg" alt="Diagram: one push through a gate built on check and fingerprint. Text version below."/></picture>
-
-<details><summary>Text version of this diagram</summary>
-
-A gate script runs `memvet check --strict`; RED means exit 1 and stop. On a
-clean run it runs `memvet fingerprint` and writes a marker, `.git/push-ok`,
-naming the checks passed, the time, and the tree. On `git push origin main`
-the pre-push hook reads the marker and fingerprints the tree again. A marker
-under 10 minutes old with a matching tree allows one plain push and is
-consumed. A stale marker, a moved tree, or a push that is not plain asks a
-human.
-
-</details>
 
 ## Documentation
 

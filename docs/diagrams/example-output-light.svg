@@ -1,7 +1,7 @@
-<svg viewBox="0 0 360 292" xmlns="http://www.w3.org/2000/svg" role="img" font-family='ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace'>
+<svg viewBox="0 0 360 294" xmlns="http://www.w3.org/2000/svg" role="img" font-family='ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace'>
 <title>memvet check examples/broken</title>
 <desc>memvet check examples/broken prints two findings. pointers RED MEMORY.md:6 dead reference: memory/preferences.md does not exist [pointers/dead-ref]. tokens YELLOW memory/acme.md 794 estimated tokens exceeds budget of 400 [tokens/over-budget]. Then the docs link and the summary: 1 red, 1 yellow, tree a5e8a264f658.</desc>
-<rect width="360" height="292" rx="6" fill="#FCFBF9"/>
+<rect width="360" height="294" rx="6" fill="#FCFBF9"/>
 <text x="16" y="30" font-size="15" fill="#2B2926" font-weight="600">The 60-second example</text>
 <line x1="16" y1="42" x2="344" y2="42" stroke="#D2CCC3"/>
 <text x="20" y="60" font-size="12" fill="#2B2926">$ memvet check examples/broken</text>

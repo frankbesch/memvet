@@ -1,0 +1,16 @@
+<svg viewBox="0 0 360 294" xmlns="http://www.w3.org/2000/svg" role="img" font-family='ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace'>
+<title>examples/broken/.memvet.toml</title>
+<desc>The config of examples/broken declares two rules. pointers: files MEMORY.md, roots memory. tokens: watch MEMORY.md and memory/*.md, budget 400.</desc>
+<rect width="360" height="294" rx="6" fill="#0E1C2B"/>
+<text x="16" y="30" font-size="15" fill="#E8E2D6" font-weight="600">Its config</text>
+<line x1="16" y1="42" x2="344" y2="42" stroke="#2D4152"/>
+<text x="20" y="60" font-size="12" fill="#A8A296">examples/broken/.memvet.toml</text>
+<text x="20" y="84" font-size="12" fill="#17A1C8">[pointers]</text>
+<text x="20" y="108" font-size="12" fill="#E8E2D6">files = [&quot;MEMORY.md&quot;]</text>
+<text x="20" y="132" font-size="12" fill="#E8E2D6">roots = [&quot;memory&quot;]</text>
+<text x="20" y="180" font-size="12" fill="#17A1C8">[tokens]</text>
+<text x="20" y="204" font-size="12" fill="#E8E2D6">watch = [&quot;MEMORY.md&quot;, &quot;memory/*.md&quot;]</text>
+<text x="20" y="228" font-size="12" fill="#E8E2D6">budget = 400</text>
+<text x="16" y="260" font-size="12" fill="#A8A296">Two rules. Each finding in the run names its</text>
+<text x="16" y="277" font-size="12" fill="#A8A296">rule.</text>
+</svg>

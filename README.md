@@ -176,7 +176,7 @@ push gate built on that is drawn under [The failure mode](#the-failure-mode).
 - [Command line](docs/cli.md): flags, exit codes, JSON and GitHub output. [Development](docs/development.md): tests, fixtures, releases, roadmap.
 - [Finding codes](docs/findings.md): what each code means and what to do. [Tree receipts](docs/tree-receipts.md): fingerprints and `--expect-tree`.
 - [SPEC.md](SPEC.md): the versioned build log, for design provenance.
-- [CONTRIBUTING.md](CONTRIBUTING.md): behavior changes start as a SPEC.md addendum with gates. Bug reports and proposed invariants are welcome as issues.
+- [CONTRIBUTING.md](.github/CONTRIBUTING.md): behavior changes start as a SPEC.md addendum with gates. Bug reports and proposed invariants are welcome as issues.
 
 ## What memvet does not do
 

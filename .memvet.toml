@@ -15,7 +15,7 @@
 # sample configs that name paths which exist only inside testdata/.
 [pointers]
 files = [
-  "README.md", "CONTRIBUTING.md", "CLAUDE.md",
+  "README.md", ".github/CONTRIBUTING.md", "CLAUDE.md",
   "docs/rules.md", "docs/recipes.md", "docs/findings.md",
   "docs/development.md", "docs/tree-receipts.md",
 ]

@@ -39,7 +39,7 @@ Exit 2 always means "memvet could not run", never "the repo failed".
 - memvet does not judge prose, does not store memory, and does not call
   any model. Do not ask it whether content is true.
 - Rules are declared in `.memvet.toml`. The rule set is frozen (FBOS
-  D-143; the admission bar is in CONTRIBUTING.md). Do not propose new
+  D-143; the admission bar is in .github/CONTRIBUTING.md). Do not propose new
   rules through this file.
 
 Full reference: [docs/cli.md](docs/cli.md), [docs/rules.md](docs/rules.md),

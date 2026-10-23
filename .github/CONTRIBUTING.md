@@ -15,13 +15,13 @@ tool.
 ## How a change lands
 
 1. Open an issue describing the invariant or bug.
-2. Behavior changes start as an addendum in [SPEC.md](SPEC.md) with numbered
+2. Behavior changes start as an addendum in [SPEC.md](../SPEC.md) with numbered
    gates: the tests, `gofmt` and `go vet`, the fixture counts, and a self-check.
    A gate is a command, its exit status, and the matching output line.
 3. Finding codes (`rule/code`) are stable once released. Messages may be
    reworded; codes may not.
-4. The fixture counts under [testdata/](testdata) are the acceptance test.
-   Changing a planted defect changes [docs/development.md](docs/development.md)
+4. The fixture counts under [testdata/](../testdata) are the acceptance test.
+   Changing a planted defect changes [docs/development.md](../docs/development.md)
    in the same commit.
 5. Dependencies stay at `BurntSushi/toml` and `golang.org/x/term`.
 
@@ -36,4 +36,4 @@ go build -o ./memvet .
 ./memvet check --strict .                           # self-check
 ```
 
-CI runs the same steps plus every directory under [examples/](examples).
+CI runs the same steps plus every directory under [examples/](../examples).

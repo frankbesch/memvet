@@ -19,7 +19,7 @@ docs/findings.md is the finding-code reference.
    (G1–G5 pattern: tests, gofmt/vet, fixture counts, self-check on FBOS,
    receipt). A gate is a command, its exit status, and the matching output
    line. Unrun gate = not shipped. Product rulings live in FBOS
-   (`~/Documents/promptkits/memory/decisions.md`, D-###); cite the D-### in
+   (`~/Developer/fbos/promptkits/memory/decisions.md`, D-###); cite the D-### in
    the addendum header and the commit message. Never write FBOS state here.
 3. Fixture counts are the acceptance test. Changing a planted defect changes
    docs/development.md and the addendum in the same commit.
@@ -39,7 +39,7 @@ gofmt -l . && go vet ./...                      # both empty / clean
 go build -o ./memvet .
 ./memvet check --no-color testdata/fixture-broken   # 10 red, 4 yellow, exit 1
 ./memvet check --no-color testdata/fixture-clean    # clean, exit 0
-./memvet check --strict ~/Documents/promptkits      # self-check on FBOS
+./memvet check --strict ~/Developer/fbos/promptkits      # self-check on FBOS
 go install .                                    # refresh ~/go/bin/memvet
 goreleaser release --snapshot --clean --skip=publish # rehearse a release
 ```

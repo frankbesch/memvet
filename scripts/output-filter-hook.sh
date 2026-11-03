@@ -11,7 +11,8 @@ case "$cmd" in
   "go test"*|"go build"*|"go vet"*|"make "*|make|"npm install"*|"npm ci"*|"pip install"*|"pip3 install"*)
     cmdfile=$(mktemp "${TMPDIR:-/tmp}/claude-quiet-cmd.XXXXXX") || exit 0
     printf '%s\n' "$cmd" > "$cmdfile"
-    /usr/bin/jq -n --arg c "bash $HOME/Documents/memvet/scripts/quiet-run.sh $cmdfile" \
+    here=$(cd "$(dirname "$0")" && pwd) || exit 0   # found from this script, so the repo can move
+    /usr/bin/jq -n --arg c "bash \"$here/quiet-run.sh\" $cmdfile" \
       '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"allow",updatedInput:{command:$c}}}'
     ;;
   *) exit 0 ;;

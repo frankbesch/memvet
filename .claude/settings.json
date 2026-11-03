@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/frankbesch/Documents/memvet/scripts/output-filter-hook.sh"
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/scripts/output-filter-hook.sh"
           }
         ]
       }
